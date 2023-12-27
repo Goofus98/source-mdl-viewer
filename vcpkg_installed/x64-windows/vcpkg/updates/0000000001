@@ -1,0 +1,9 @@
+Package: soil2
+Version: 1.3.0
+Port-Version: 1
+Depends: vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 6ed637788b8439853e58cd08d510c28e00c459792508b88d7162f645fb54592c
+Description: Simple OpenGL Image Library 2
+Status: purge ok not-installed
