@@ -15,21 +15,26 @@
 #include "MDLParser.h"
 
 int width{ 1920 }, height{ 1080 };
+//Load the mdl vvd and vtx files.
 const std::string src_mdl{"./mdls/coco_player.mdl"};
 const std::string src_vvd{"./mdls/coco_player.vvd"};
 const std::string src_vtx{"./mdls/coco_player.dx80.vtx"};
 
 size_t numVerts{};
+
+//Setup number of buffers and atribs
 const size_t numVAOs{1};
 const size_t numVBOs{2};
 
+
 glm::vec3 origin(0.0f, 0.0f, 0.0f);
-glm::vec3 cameraLoc(0.0f, 30.0f, 150.4f);
+glm::vec3 cameraLoc(0.0f, 30.0f, 150.4f); //Default Camera location
 
 //Allocate variables used in draw() function, so that they won’t need to be allocated during rendering
 GLuint mvLoc, projLoc;
 
 float aspect;
+//Create Matrices for percpective view model and model-view
 glm::mat4 pMat, vMat, mMat, mvMat;
 size_t BufferSize{};
 GLuint renderingProgram;
@@ -38,7 +43,7 @@ GLuint vbo[numVBOs];
 
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
-const float camspeed = 25.0f;
+const float camspeed = 25.0f; //Default camera speed when moving
 
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -77,7 +82,6 @@ void setupVertices(void) {
 
 
         ++BufferSize;
-        //std::cout << (vv.GetVertex(i))->pos.x << std::endl;
     }
     glGenVertexArrays(1, vao);
     glBindVertexArray(vao[0]);
@@ -85,7 +89,6 @@ void setupVertices(void) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, BufferSize * sizeof(vertices[0]), &vertices[0], GL_STATIC_DRAW);
 
-    std::cout << BufferSize << std::endl;
 }
 
 void init(GLFWwindow* window) {
@@ -120,7 +123,7 @@ void draw(GLFWwindow* window, double currentTime) {
 
     mvMat = vMat * mMat;
 
-
+    //WASD Camera controls
     float cameraSpeed = camspeed * deltaTime; // adjust accordingly
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cameraLoc += cameraSpeed * cameraFront;
@@ -146,7 +149,7 @@ void draw(GLFWwindow* window, double currentTime) {
     glDrawArrays(GL_POINTS, 0, BufferSize);
 }
 
-
+//Create Camera Controls
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates range from bottom to top
@@ -180,8 +183,8 @@ int main() {
 
     GLFWwindow* window = glfwCreateWindow(width, height, "MDL Viewer", NULL, NULL);
     glfwMakeContextCurrent(window);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //Disable cursor
+    glfwSetCursorPosCallback(window, mouse_callback); //Setup the callback func for mouse camera controls
 
     if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
     glfwSwapInterval(1);
